@@ -10,6 +10,7 @@
 
     <Grid>
         <StackPanel>
+            <Button x:Name="ButtonBack" Click="ButtonBack_Click">戻る</Button>
             <TextBlock>二枚目のページ</TextBlock>
             <TextBox/>
         </StackPanel>

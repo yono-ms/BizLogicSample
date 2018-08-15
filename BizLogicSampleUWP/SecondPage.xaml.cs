@@ -31,5 +31,10 @@ namespace BizLogicSampleUWP
 
             ViewModel = App.Current.BizLogic.SecondViewModel;
         }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.GoBack();
+        }
     }
 }

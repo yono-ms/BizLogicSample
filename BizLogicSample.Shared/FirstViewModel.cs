@@ -32,6 +32,11 @@ namespace BizLogicSample.Shared
         /// </summary>
         public void CommandCommit()
         {
+            if (string.IsNullOrWhiteSpace(FirstName))
+            {
+                MainViewModel.AlertMessage = "入力してください";
+                return;
+            }
             // 次画面へ
             MainViewModel.CurrentViewModelName = nameof(SecondViewModel);
         }
