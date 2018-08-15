@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="BizLogicSampleUWP.MainPage"
+    x:Class="BizLogicSampleUWP.FirstPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BizLogicSampleUWP"
@@ -9,6 +9,10 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Frame x:Name="FrameContent"/>
+        <StackPanel>
+            <TextBlock>最初のページ</TextBlock>
+            <TextBox Text="{x:Bind ViewModel.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Click="{x:Bind ViewModel.CommandCommit}">次へ</Button>
+        </StackPanel>
     </Grid>
 </Page>

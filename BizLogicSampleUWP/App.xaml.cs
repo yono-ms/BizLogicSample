@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BizLogicSample.Shared;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,11 @@ namespace BizLogicSampleUWP
     /// </summary>
     sealed partial class App : Application
     {
+        public static new App Current => (App)Application.Current;
+        /// <summary>
+        /// ビジネスロジック
+        /// </summary>
+        public BizLogicMain BizLogic { get; set; }
         /// <summary>
         /// 単一アプリケーション オブジェクトを初期化します。これは、実行される作成したコードの
         ///最初の行であるため、main() または WinMain() と論理的に等価です。
@@ -30,6 +36,15 @@ namespace BizLogicSampleUWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            BizLogic = new BizLogicMain();
+
+            UnhandledException += App_UnhandledExceptionAsync;
+        }
+
+        private async void App_UnhandledExceptionAsync(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            await new Windows.UI.Popups.MessageDialog(e.ToString(), "UnhandledException").ShowAsync();
         }
 
         /// <summary>
@@ -53,6 +68,8 @@ namespace BizLogicSampleUWP
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: 以前中断したアプリケーションから状態を読み込みます
+
+                    BizLogic.LoadInstanceState();
                 }
 
                 // フレームを現在のウィンドウに配置します
@@ -94,6 +111,9 @@ namespace BizLogicSampleUWP
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: アプリケーションの状態を保存してバックグラウンドの動作があれば停止します
+
+            BizLogic.SaveInstanceState();
+
             deferral.Complete();
         }
     }

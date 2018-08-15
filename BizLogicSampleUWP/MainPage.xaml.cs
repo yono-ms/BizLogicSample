@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BizLogicSample.Shared;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -22,9 +24,47 @@ namespace BizLogicSampleUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private Dictionary<string, Type> viewNames;
+
         public MainPage()
         {
             this.InitializeComponent();
+
+            // ビュー一覧を作成
+            viewNames = new Dictionary<string, Type>
+            {
+                [nameof(FirstViewModel)] = typeof(FirstPage),
+                [nameof(SecondViewModel)] = typeof(SecondPage)
+            };
+
+            Loaded += MainPage_Loaded;
+
+            App.Current.BizLogic.MainViewModel.PropertyChanged += MainViewModel_PropertyChangedAsync;
+        }
+
+        private async void MainViewModel_PropertyChangedAsync(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var vm = sender as MainViewModel;
+            switch (e.PropertyName)
+            {
+                case nameof(vm.CurrentViewModelName):
+                    FrameContent.Navigate(viewNames[vm.CurrentViewModelName]);
+                    break;
+
+                case nameof(vm.AlertMessage):
+                    await new ContentDialog { Content = vm.AlertMessage, PrimaryButtonText = "OK" }.ShowAsync();
+                    break;
+
+                default:
+                    Debug.WriteLine($"MainViewModel_PropertyChanged {e.PropertyName}");
+                    break;
+            }
+        }
+
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            var vm = App.Current.BizLogic.MainViewModel;
+            FrameContent.Navigate(viewNames[vm.CurrentViewModelName]);
         }
     }
 }
