@@ -11,7 +11,7 @@
     <Grid>
         <StackPanel>
             <TextBlock>最初のページ</TextBlock>
-            <TextBox Text="{x:Bind ViewModel.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Text="{x:Bind ViewModel.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="{x:Bind ViewModel.FirstNameError, Mode=OneWay}" PlaceholderText="{x:Bind ViewModel.FirstNamePlaceholder}"/>
             <Button Click="{x:Bind ViewModel.CommandCommit}">次へ</Button>
         </StackPanel>
     </Grid>

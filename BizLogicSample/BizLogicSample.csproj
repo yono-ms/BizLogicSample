@@ -6,4 +6,8 @@
 
   <Import Project="..\BizLogicSample.Shared\BizLogicSample.Shared.projitems" Label="Shared" />
 
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+  </ItemGroup>
+
 </Project>
