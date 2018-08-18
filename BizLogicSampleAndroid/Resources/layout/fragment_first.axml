@@ -10,5 +10,21 @@
 		android:minWidth="25px"
 		android:minHeight="25px"
 		android:id="@+id/textViewTitle" />
+	<TextView
+		android:text=""
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:minWidth="25px"
+		android:minHeight="25px"
+		android:id="@+id/textViewNameError" />
+	<EditText
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/editTextName" />
+	<Button
+		android:text="Button"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/button" />
 
 </LinearLayout>
