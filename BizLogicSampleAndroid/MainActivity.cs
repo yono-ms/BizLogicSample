@@ -42,12 +42,21 @@ namespace BizLogicSampleAndroid
         {
             base.OnResume();
             System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnResume");
+
+            (Application as CustomApplication).BizLogic.MainViewModel.PropertyChanged += MainViewModel_PropertyChanged;
+        }
+
+        private void MainViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"MainViewModel_PropertyChanged {e.PropertyName}");
         }
 
         protected override void OnPause()
         {
             base.OnPause();
             System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnPause");
+
+            (Application as CustomApplication).BizLogic.MainViewModel.PropertyChanged -= MainViewModel_PropertyChanged;
         }
 
         protected override void OnStop()
