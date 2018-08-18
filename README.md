@@ -10,3 +10,8 @@ UWPのx:Bindを基本にVMとBizLogicを考え直す。
 ## CheckPoint
 AndroidでBizLogicをどこに置くか、永続化をどうするか。
 Applicationライフサイクルをもう一度確認する。
+
+### Android application
+アプリケーションの生成はonCreateでフックできる。
+しかしアプリケーションの終了イベントが無い。
+ApplicationにBizLogicを置いてもコミット契機以外での保存タイミングが無い。
