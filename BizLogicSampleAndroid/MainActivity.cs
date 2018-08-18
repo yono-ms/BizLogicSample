@@ -16,6 +16,7 @@ namespace BizLogicSampleAndroid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnCreate");
             SetContentView(Resource.Layout.activity_main);
 
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
@@ -23,6 +24,42 @@ namespace BizLogicSampleAndroid
 
             FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             fab.Click += FabOnClick;
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnStart");
+        }
+
+        protected override void OnRestart()
+        {
+            base.OnRestart();
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnRestart");
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnResume");
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnPause");
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnStop");
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnDestroy");
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
