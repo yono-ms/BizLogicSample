@@ -10,21 +10,26 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using BizLogicSample.Shared;
 
 namespace BizLogicSampleAndroid
 {
     [Application]
     public class CustomApplication : Application
     {
+        public BizLogicMain BizLogic { get; set; }
+
         public CustomApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
-
+            BizLogic = new BizLogicMain();
         }
 
         public override void OnCreate()
         {
             base.OnCreate();
             System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnCreate");
+
+            BizLogic.LoadInstanceState();
         }
 
         public override void OnTerminate()
