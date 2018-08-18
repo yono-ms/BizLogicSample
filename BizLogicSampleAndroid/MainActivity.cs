@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
@@ -6,6 +7,7 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Views;
 using Android.Widget;
+using BizLogicSample.Shared;
 
 namespace BizLogicSampleAndroid
 {
@@ -13,10 +15,27 @@ namespace BizLogicSampleAndroid
     public class MainActivity : AppCompatActivity
     {
 
+        public BizLogicMain BizLogic => (Application as CustomApplication).BizLogic;
+        public MainViewModel MainViewModel => (Application as CustomApplication).BizLogic.MainViewModel;
+
+        private Dictionary<string, Type> viewNames;
+
+        public BaseFragment GetFragmentFromName(string name)
+        {
+            return Activator.CreateInstance(viewNames[name]) as BaseFragment;
+        }
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnCreate");
+            System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnCreate recycle={savedInstanceState != null}");
+
+            viewNames = new Dictionary<string, Type>
+            {
+                [nameof(FirstViewModel)] = typeof(FirstFragment),
+                [nameof(SecondViewModel)] = typeof(SecondFragment)
+            };
+
             SetContentView(Resource.Layout.activity_main);
 
             Android.Support.V7.Widget.Toolbar toolbar = FindViewById<Android.Support.V7.Widget.Toolbar>(Resource.Id.toolbar);
@@ -24,6 +43,12 @@ namespace BizLogicSampleAndroid
 
             FloatingActionButton fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
             fab.Click += FabOnClick;
+
+            if (savedInstanceState == null)
+            {
+                var fragment = GetFragmentFromName(MainViewModel.CurrentViewModelName);
+                SupportFragmentManager.BeginTransaction().Replace(Resource.Id.frameLayoutContent, fragment).Commit();
+            }
         }
 
         protected override void OnStart()
@@ -43,7 +68,7 @@ namespace BizLogicSampleAndroid
             base.OnResume();
             System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnResume");
 
-            (Application as CustomApplication).BizLogic.MainViewModel.PropertyChanged += MainViewModel_PropertyChanged;
+            MainViewModel.PropertyChanged += MainViewModel_PropertyChanged;
         }
 
         private void MainViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -56,7 +81,7 @@ namespace BizLogicSampleAndroid
             base.OnPause();
             System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnPause");
 
-            (Application as CustomApplication).BizLogic.MainViewModel.PropertyChanged -= MainViewModel_PropertyChanged;
+            MainViewModel.PropertyChanged -= MainViewModel_PropertyChanged;
         }
 
         protected override void OnStop()
