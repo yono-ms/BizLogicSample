@@ -54,6 +54,8 @@ namespace BizLogicSampleAndroid
         {
             base.OnTrimMemory(level);
             System.Diagnostics.Debug.WriteLine($"{Class.SimpleName} OnTrimMemory {level.ToString()}");
+
+            BizLogic.SaveInstanceState();
         }
     }
 }
