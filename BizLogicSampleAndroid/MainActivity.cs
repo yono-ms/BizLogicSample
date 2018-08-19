@@ -74,6 +74,23 @@ namespace BizLogicSampleAndroid
         private void MainViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"MainViewModel_PropertyChanged {e.PropertyName}");
+
+            switch (e.PropertyName)
+            {
+                case nameof(MainViewModel.CurrentViewModelName):
+                    var fragment = GetFragmentFromName(MainViewModel.CurrentViewModelName);
+                    SupportFragmentManager.BeginTransaction().Replace(Resource.Id.frameLayoutContent, fragment).Commit();
+                    break;
+
+                case nameof(MainViewModel.AlertMessage):
+                    var dialog = AlertDialogFragment.NewInstance(MainViewModel.AlertMessage);
+                    dialog.Show(SupportFragmentManager, nameof(AlertDialogFragment));
+                    break;
+
+                default:
+                    System.Diagnostics.Debug.WriteLine(" unknown.");
+                    break;
+            }
         }
 
         protected override void OnPause()
@@ -118,6 +135,33 @@ namespace BizLogicSampleAndroid
             View view = (View) sender;
             Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong)
                 .SetAction("Action", (Android.Views.View.IOnClickListener)null).Show();
+        }
+
+        public class AlertDialogFragment : Android.Support.V4.App.DialogFragment
+        {
+            private const string KEY_MESSAGE = "KEY_MESSAGE";
+
+            public static AlertDialogFragment NewInstance(string message)
+            {
+                var bundle = new Bundle();
+                bundle.PutString(KEY_MESSAGE, message);
+
+                var dialog = new AlertDialogFragment();
+                dialog.Arguments = bundle;
+
+                return dialog;
+            }
+
+            public override Dialog OnCreateDialog(Bundle savedInstanceState)
+            {
+                Cancelable = false;
+
+                var dialog = new Android.Support.V7.App.AlertDialog.Builder(Context)
+                    .SetMessage(Arguments.GetString(KEY_MESSAGE))
+                    .SetPositiveButton("OK", (s, e)=> { });
+
+                return dialog.Create();
+            }
         }
 	}
 }

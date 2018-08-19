@@ -10,11 +10,16 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using BizLogicSample.Shared;
 
 namespace BizLogicSampleAndroid
 {
     public class SecondFragment : BaseFragment
     {
+        public SecondViewModel ViewModel => BizLogic.SecondViewModel;
+
+        private EditText editTextSecondName;
+
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -25,7 +30,42 @@ namespace BizLogicSampleAndroid
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             // Use this to return your custom view for this Fragment
-            return inflater.Inflate(Resource.Layout.fragment_second, container, false);
+            var itemView = inflater.Inflate(Resource.Layout.fragment_second, container, false);
+
+            editTextSecondName = itemView.FindViewById<EditText>(Resource.Id.editTextName);
+
+            ViewModel_PropertyChanged(ViewModel, new System.ComponentModel.PropertyChangedEventArgs("init"));
+
+            return itemView;
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            editTextSecondName.TextChanged += EditTextSecondName_TextChanged;
+        }
+
+        private void EditTextSecondName_TextChanged(object sender, Android.Text.TextChangedEventArgs e)
+        {
+            ViewModel.SecondName = e.Text.ToString();
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"ViewModel_PropertyChanged {e.PropertyName}");
+
+            if (!editTextSecondName.Text.Equals(ViewModel.SecondName))
+            {
+                editTextSecondName.Text = ViewModel.SecondName;
+            }
+        }
+
+        public override void OnPause()
+        {
+            base.OnPause();
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            editTextSecondName.TextChanged -= EditTextSecondName_TextChanged;
         }
     }
 }
